@@ -15,9 +15,9 @@
 		9210832729D5FE2100989D4E /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9210832529D5FE2100989D4E /* LaunchScreen.storyboard */; };
 		9210833029D602F500989D4E /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9210832F29D602F500989D4E /* User.swift */; };
 		9210833229D6030500989D4E /* Task.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9210833129D6030500989D4E /* Task.swift */; };
-		9210833429D6071400989D4E /* UserManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9210833329D6071400989D4E /* UserManager.swift */; };
 		9210833829D60E3000989D4E /* SwaggerAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9210833729D60E3000989D4E /* SwaggerAPI.swift */; };
 		9210833A29D60F2F00989D4E /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9210833929D60F2F00989D4E /* Constants.swift */; };
+		921F227929D9521C005DE9ED /* AuthenticationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 921F227829D9521C005DE9ED /* AuthenticationViewModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -31,9 +31,9 @@
 		9210832829D5FE2100989D4E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		9210832F29D602F500989D4E /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		9210833129D6030500989D4E /* Task.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Task.swift; sourceTree = "<group>"; };
-		9210833329D6071400989D4E /* UserManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserManager.swift; sourceTree = "<group>"; };
 		9210833729D60E3000989D4E /* SwaggerAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwaggerAPI.swift; sourceTree = "<group>"; };
 		9210833929D60F2F00989D4E /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		921F227829D9521C005DE9ED /* AuthenticationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -75,7 +75,6 @@
 				9210832329D5FE2100989D4E /* Assets.xcassets */,
 				9210832529D5FE2100989D4E /* LaunchScreen.storyboard */,
 				9210832829D5FE2100989D4E /* Info.plist */,
-				9210833329D6071400989D4E /* UserManager.swift */,
 				9210833729D60E3000989D4E /* SwaggerAPI.swift */,
 				9210833929D60F2F00989D4E /* Constants.swift */,
 			);
@@ -102,6 +101,7 @@
 		9210833629D60C7B00989D4E /* ViewModel */ = {
 			isa = PBXGroup;
 			children = (
+				921F227829D9521C005DE9ED /* AuthenticationViewModel.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -177,11 +177,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9210833429D6071400989D4E /* UserManager.swift in Sources */,
 				9210833029D602F500989D4E /* User.swift in Sources */,
 				9210831F29D5FE0F00989D4E /* AuthenticationViewController.swift in Sources */,
 				9210833229D6030500989D4E /* Task.swift in Sources */,
 				9210831B29D5FE0F00989D4E /* AppDelegate.swift in Sources */,
+				921F227929D9521C005DE9ED /* AuthenticationViewModel.swift in Sources */,
 				9210831D29D5FE0F00989D4E /* SceneDelegate.swift in Sources */,
 				9210833829D60E3000989D4E /* SwaggerAPI.swift in Sources */,
 				9210833A29D60F2F00989D4E /* Constants.swift in Sources */,

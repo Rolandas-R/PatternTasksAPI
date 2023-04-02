@@ -6,389 +6,149 @@
 //
 
 import UIKit
+import Foundation
+
+import Foundation
 
 class SwaggerAPI {
     
-    enum APIErorr: Error {
+    enum APIError: Error {
         case badRequest(errorMessage: String?)
         case notFound(errorMessage: String?)
         case fetchFail
         case parsingFail
         case methodNotAllowed(errorMessage: String?)
-        
     }
     
-    
-    static let shared = SwaggerAPI()
-    //    private(set) var dataTask: URLSessionDataTask?
-    private init() { }
-    
-    
-    //    private let encoder = JSONEncoder()
+    private let session: URLSession
     private let decoder = JSONDecoder()
     
+    init(session: URLSession = URLSession.shared) {
+        self.session = session
+    }
     
-    // POST
+    // MARK: - HTTP Methods
     
-    private func postRequest(url: URL, body: Data?, callback: @escaping (Result<Data, APIErorr>) -> Void){
-        var request = URLRequest (url: url)
+    private func dataTask(with request: URLRequest, completionHandler: @escaping (Result<Data, APIError>) -> Void) {
+        session.dataTask(with: request) { data, response, error in
+            guard let data = data else {
+                completionHandler(.failure(.fetchFail))
+                return
+            }
+            
+            guard let httpResponse = response as? HTTPURLResponse else {
+                completionHandler(.failure(.fetchFail))
+                return
+            }
+            
+            switch httpResponse.statusCode {
+            case 200:
+                completionHandler(.success(data))
+            case 404:
+                completionHandler(.failure(.notFound(errorMessage: String(data: data, encoding: .utf8))))
+            case 400:
+                completionHandler(.failure(.badRequest(errorMessage: String(data: data, encoding: .utf8))))
+            case 405:
+                completionHandler(.failure(.methodNotAllowed(errorMessage: String(data: data, encoding: .utf8))))
+            default:
+                completionHandler(.failure(.fetchFail))
+            }
+        }.resume()
+    }
+    
+    private func postRequest(url: URL, body: Data?, completionHandler: @escaping (Result<Data, APIError>) -> Void) {
+        var request = URLRequest(url: url)
         request.httpMethod = "POST"
         request.httpBody = body
-        request.addValue ("application/json", forHTTPHeaderField: "Content-Type")
-        
-        URLSession.shared.dataTask(with: request) { data, response, error in
-            guard let data = data else {
-                callback(.failure(.fetchFail))
-                return
-            }
-            
-            guard let httpResponse = response as? HTTPURLResponse else {
-                callback(.failure(.fetchFail))
-                return
-            }
-            
-            switch httpResponse.statusCode {
-            case 200:
-                callback(.success(data))
-            case 404:
-                callback(.failure(.notFound(errorMessage: String(data: data, encoding: .utf8))))
-            case 400:
-                callback(.failure(.badRequest(errorMessage: String(data: data, encoding: .utf8))))
-            default:
-                callback(.failure(.fetchFail))
-            }
-        }.resume()
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        dataTask(with: request, completionHandler: completionHandler)
     }
     
-    
-    // GET
-    public func getRequest(url: URL?, callback: @escaping (Result<Data, APIErorr>) -> Void) {
-        
-        guard let url else { return }
-        URLSession.shared.dataTask(with: url) { data, response, error in
-            
-            guard let data = data else {
-                callback(.failure(.fetchFail))
-                return
-            }
-            guard let httpResponse = response as? HTTPURLResponse else {
-                callback(.failure(.fetchFail))
-                return
-            }
-            
-            switch httpResponse.statusCode {
-            case 200:
-                callback(.success(data))
-            case 400:
-                callback(.failure(.badRequest(errorMessage: String(data: data, encoding: .utf8))))
-            case 404:
-                callback(.failure(.notFound(errorMessage: String(data: data, encoding: .utf8))))
-            default:
-                callback(.failure(.fetchFail))
-            }
-        }.resume()
+    private func getRequest(url: URL, completionHandler: @escaping (Result<Data, APIError>) -> Void) {
+        let request = URLRequest(url: url)
+        dataTask(with: request, completionHandler: completionHandler)
     }
     
-    // DELETE
-    
-    public func deleteRequest (url: URL?, completion: @escaping (Data?) -> Void) {
-        
-        var request = URLRequest (url: url!)
+    private func deleteRequest(url: URL, completionHandler: @escaping (Result<Data, APIError>) -> Void) {
+        var request = URLRequest(url: url)
         request.httpMethod = "DELETE"
-        URLSession.shared.dataTask(with: request) { data, response, error in
-            guard let data = data, error == nil else {
-                print(error ?? "Unknown error")
-                return
-            }
-            if let httpResponse = response as? HTTPURLResponse {
-                print("statusCode: \(httpResponse.statusCode)")
-                switch httpResponse.statusCode {
-                case 200:
-                    print("Success: deleted")
-                case 400:
-                    print("Bad request")
-                case 404:
-                    print("Already deleted")
-                default:
-                    print("Unknown generic error")
-                }
-                completion (data)
-                return
-            }
-        }.resume()
+        dataTask(with: request, completionHandler: completionHandler)
     }
     
-    // PUT
-    
-    private func putRequest(url: URL, body: Data?, callback: @escaping (Result<Data, APIErorr>) -> Void){
-        var request = URLRequest (url: url)
+    private func putRequest(url: URL, body: Data?, completionHandler: @escaping (Result<Data, APIError>) -> Void) {
+        var request = URLRequest(url: url)
         request.httpMethod = "PUT"
         request.httpBody = body
-        request.addValue ("application/json", forHTTPHeaderField: "Content-Type")
-        
-        URLSession.shared.dataTask(with: request) { data, response, error in
-            guard let data = data else {
-                callback(.failure(.fetchFail))
-                return
-            }
-            
-            guard let httpResponse = response as? HTTPURLResponse else {
-                callback(.failure(.fetchFail))
-                return
-            }
-            
-            switch httpResponse.statusCode {
-            case 200:
-                callback(.success(data))
-            case 404:
-                callback(.failure(.notFound(errorMessage: String(data: data, encoding: .utf8))))
-            case 405:
-                callback(.failure(.methodNotAllowed(errorMessage: String(data: data, encoding: .utf8))))
-            case 400:
-                callback(.failure(.badRequest(errorMessage: String(data: data, encoding: .utf8))))
-            default:
-                callback(.failure(.fetchFail))
-            }
-        }.resume()
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        dataTask(with: request, completionHandler: completionHandler)
     }
     
-    
-    
-    // MARK: Darbines funkcijos
-    
-//    USERio managinimo f-jos
-    
-    func registerUser(user: UserManager.AuthentificateRequest, completion: @escaping (Result<User, Error>) -> Void) {
-    
-        let url = Constants.getURL(for: .userEndpoint, urlSuffix: .register )
-        let registerRequestParams = user
-        
-        let bodyData = try! JSONEncoder().encode(registerRequestParams)
-        
-        postRequest(url: url!, body: bodyData) { [weak self] response in
-            guard self != nil else { return }
-            switch response {
-            case .success(let responseData):
-                guard let userResponse = try? JSONDecoder().decode(UserManager.UserResponse.self, from: responseData) else { return }
-                let user = User(username: user.username, password: user.password, userId: userResponse.userId)
-                user.userId = userResponse.userId
-                print("registering success")
-                completion(.success(user))
-            case .failure(let error):
-                switch error {
-                case .fetchFail:
-                    print("unknown error")
-                case .notFound:
-                    print("Not found")
-                case .badRequest(let errorMessage):
-                    print("Bad request:")
-                    print(errorMessage ?? "Bad request")
-                case .parsingFail:
-                    print("parsing failed")
-                case .methodNotAllowed:
-                    print("wrong method")
-                }
-                completion(.failure(error))
-            }
-        }
-    }
-    
+    // MARK: - User Management
     
     func loginUser(user: User, completion: @escaping (Result<User, Error>) -> Void) {
-        let loginUserRequest = User(username: user.username, password: user.password)
-        let loginData = try! JSONEncoder().encode (loginUserRequest)
-        guard let loginURL = Constants.getURL(for: .userEndpoint, urlSuffix: .login) else { return }
+        guard let loginURL = Constants.getURL(for: Constants.userEndpoint, urlSuffix: .login) else { return }
+        let loginUserRequest = User(username: user.username, password: user.password, userId: user.userId)
+        let loginData = try? JSONEncoder().encode(loginUserRequest)
         
-        postRequest(url: loginURL, body: loginData) { [weak self] loginResponse in
-            guard self != nil else { return }
-            switch loginResponse {
+        postRequest(url: loginURL, body: loginData) { response in
+            switch response {
             case .success(let responseData):
-                guard let loginResponse = try? JSONDecoder().decode(UserManager.UserResponse.self, from: responseData) else { return }
+                guard let loginResponse = try? JSONDecoder().decode(UserManager.UserResponse.self, from: responseData) else {
+                    completion(.failure(APIError.parsingFail))
+                    return
+                }
                 let user = User(username: user.username, password: user.password, userId: loginResponse.userId)
-                print("registering success")
                 completion(.success(user))
             case .failure(let error):
-                switch error {
-                case .fetchFail:
-                    print("unknown error")
-                case .notFound:
-                    print("Not found")
-                case .badRequest(let errorMessage):
-                    print("Bad request:")
-                    print(errorMessage ?? "Bad request")
-                case .parsingFail:
-                    print("parsing failed")
-                case .methodNotAllowed:
-                    print("wrong method")
-                }
                 completion(.failure(error))
             }
-
         }
     }
     
-    func deleteUser(userId: Int) {
-        guard let url = Constants.getURL(for: .userEndpoint, id: userId) else { return }
+    func deleteUser(userId: Int, completion: @escaping (Result<Void, Error>) -> Void) {
+        guard let url = Constants.getURL(for: Constants.userEndpoint, id: userId) else { return }
         
-        deleteRequest(url: url){ responseData in
-            guard let responseData = responseData else { return }
-            print (String (data: responseData, encoding: .utf8)!)
-            UserManager.users.removeLast()
+        deleteRequest(url: url) { response in
+            switch response {
+            case .success(_):
+                completion(.success(()))
+            case .failure(let error):
+                completion(.failure(error))
+            }
         }
     }
+    //
+    //    // MARK: - Helper Methods
+    //
+    //    private func showErrorMessage(_ message: String) {
+    //        let alert = UIAlertController(title: "Error", message: message, preferredStyle: .alert)
+    //        let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+    //        alert.addAction(okAction)
+    //        present(alert, animated: true, completion: nil)
+    //    }
+    //
+    //    private func navigateToHome(user: User) {
+    //        let homeViewController = HomeViewController(user: user)
+    //        navigationController?.pushViewController(homeViewController, animated: true)
+    //    }
     
     
-    // TASKo managinimo f-jos
-
-//    
-//    func fetchUserTasks(userId: Int, completion: @escaping (Result<[Task], APIErorr>) -> Void) {
-//        
-//        let id = userId
-//        guard let queryURL = Constants.buildURLWithParams(userId: id) else { return }
-//        print(queryURL)
-//        getRequest(url: queryURL) { [weak self] result in
-//            guard let self else { return }
-//            
-//            switch result {
-//            case .success(let data):
-//                do {
-//                    let parsedData = try self.decoder.decode(Tasks.self, from: data)
-//                    completion(.success(parsedData.tasks))
-//                    
-//                } catch {
-//                    completion(.failure(.parsingFail))
-//                }
-//            case .failure(let error):
-//                switch error {
-//                case .fetchFail:
-//                    print("unknown error")
-//                case .notFound:
-//                    print("Not found")
-//                case .badRequest(let errorMessage):
-//                    print("Bad request:")
-//                    print(errorMessage ?? "Bad request")
-//                case .parsingFail:
-//                    print("parsing failed")
-//                case .methodNotAllowed:
-//                    print("wrong method")
-//                }
-//                //            completion(.failure(.parsingFail))
-//            }
-//        }
-//    }
-//    
-//    func fetchTask (taskId: Int, completion: @escaping (Result<Task, APIErorr>) -> Void) {
-//        
-//        guard let queryURL = Constants.getURL(for: .taskEndpoint, id: taskId) else { return }
-//        print(queryURL)
-//        getRequest(url: queryURL) { [weak self] result in
-//            guard let self else { return }
-//            
-//            switch result {
-//            case .success(let data):
-//                do {
-//                    let parsedData = try self.decoder.decode(Task.self, from: data)
-//                    completion(.success(parsedData))
-//                    
-//                } catch {
-//                    completion(.failure(.parsingFail))
-//                }
-//            case .failure(let error):
-//                switch error {
-//                case .fetchFail:
-//                    print("unknown error")
-//                case .notFound:
-//                    print("Not found")
-//                case .badRequest(let errorMessage):
-//                    print("Bad request:")
-//                    print(errorMessage ?? "Bad request")
-//                case .parsingFail:
-//                    print("parsing failed")
-//                case .methodNotAllowed:
-//                    print("wrong method")
-//                }
-//                //            completion(.failure(.parsingFail))
-//            }
-//        }
-//    }
-//    
-//    func createNewTask(newTask: TasksManager.NewTaskRegistrationRequest, completion: @escaping (Data?) -> Void) {
-//        let newTaskURL = Constants.getURL(for: .taskEndpoint)!
-//        
-//        let postNewTaskRequest = newTask
-//        let taskData = try! JSONEncoder().encode (postNewTaskRequest)
-//        
-//        postRequest(url: newTaskURL, body: taskData) { [weak self] response in
-//            guard self != nil else { return }
-//            switch response {
-//            case .success(let data):
-//                print("New Task was created")
-//                completion(data)
-//            case .failure(let error):
-//                switch error {
-//                case .fetchFail:
-//                    print("unknown error")
-//                case .notFound:
-//                    print("Not found")
-//                case .badRequest(let errorMessage):
-//                    print("Bad request:")
-//                    print(errorMessage ?? "Bad request")
-//                case .parsingFail:
-//                    print("parsing failed")
-//                case .methodNotAllowed:
-//                    print("wrong method")
-//                }
-//                completion(nil)
-//            }
-//        }
-//    }
-//    
-//    func editTask(taskDetails: TasksManager.TaskEditRequest, completion: @escaping (Data?) -> Void) {
-//        let editTaskURL = Constants.getURL(for: .taskEndpoint)!
-//        
-//        let postEditTaskRequest = taskDetails
-//        
-//        let taskData = try! JSONEncoder().encode (postEditTaskRequest)
-//        
-//        putRequest(url: editTaskURL, body: taskData) { [weak self] response in
-//            guard self != nil else { return }
-//            switch response {
-//            case .success(let data):
-//                print("Task was edited")
-//                completion(data)
-//            case .failure(let error):
-//                switch error {
-//                case .fetchFail:
-//                    print("unknown error")
-//                case .notFound:
-//                    print("Not found")
-//                case .badRequest(let errorMessage):
-//                    print("Bad request:")
-//                    print(errorMessage ?? "Bad request")
-//                case .parsingFail:
-//                    print("parsing failed")
-//                case .methodNotAllowed:
-//                    print("wrong method")
-//                }
-//                completion(nil)
-//            }
-//        }
-//    }
-//    
-//    func deleteTask(taskId: Int) {
-//        
-//        guard let url = Constants.getURL(for: .taskEndpoint, id: taskId) else { return }
-//        
-//        deleteRequest(url: url){ responseData in
-//            guard let responseData = responseData else { return }
-//            print(String (data: responseData, encoding: .utf8)!)
-//            print("Task with id \(taskId) was deleted")
-//
-//        }
-//    }
-//  
-//
-//}
-//
-//    
-
+    func registerUser(user: UserManager.AuthentificateRequest, completion: @escaping (Result<User, Error>) -> Void) {
+        guard let url = Constants.getURL(for: Constants.userEndpoint, urlSuffix: .register) else { return }
+        let bodyData = try? JSONEncoder().encode(user)
+        
+        postRequest(url: url, body: bodyData) { response in
+            switch response {
+            case .success(let responseData):
+                guard let userResponse = try? JSONDecoder().decode(UserManager.UserResponse.self, from: responseData) else {
+                    completion(.failure(APIError.parsingFail))
+                    return
+                }
+                let user = User(username: user.username, password: user.password, userId: userResponse.userId)
+                completion(.success(user))
+            case .failure(let error):
+                completion(.failure(error))
+            }
+        }
+    }
+}

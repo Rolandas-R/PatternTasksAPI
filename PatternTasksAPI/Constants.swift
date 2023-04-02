@@ -7,34 +7,28 @@
 
 import Foundation
 
-
-enum Constants: String {
-    case baseURL = "http://134.122.94.77/api/"
-    case userEndpoint = "User/"
-    case taskEndpoint = "Task/"
+struct Constants {
+    static let baseURL = "http://134.122.94.77/api/"
+    static let userEndpoint = "User/"
+    static let taskEndpoint = "Task/"
     
     enum URLSuffix: String {
         case register = "register/"
         case login = "login/"
         case userTasks = "/api/Task/userTasks"
     }
-    
-    
-    static func getURL(for constant: Constants,
-                       urlSuffix: URLSuffix? = nil,
-                       id: Int? = nil) -> URL? {
-        
-        var urlString = baseURL.rawValue + constant.rawValue
-        if let id {
-            urlString = baseURL.rawValue + constant.rawValue + String(id)
-        } else if let urlSuffix {
-            urlString = baseURL.rawValue + constant.rawValue + urlSuffix.rawValue
+
+    static func getURL(for endpoint: String, urlSuffix: Constants.URLSuffix? = nil, id: Int? = nil) -> URL? {
+        var urlString = Constants.baseURL + endpoint
+        if let id = id {
+            urlString += String(id)
+        } else if let urlSuffix = urlSuffix {
+            urlString += urlSuffix.rawValue
         }
         return URL(string: urlString)
     }
     
     static func buildURLWithParams(userId: Int?) -> URL? {
-            
         var components = URLComponents()
         components.scheme = "http"
         components.host = "134.122.94.77"
@@ -42,8 +36,6 @@ enum Constants: String {
         let userIdQueryItem = URLQueryItem(name: "userId", value: String(userId ?? 0))
         let queryItems = [userIdQueryItem]
         components.queryItems = queryItems
-        guard let queryURL = components.url else { return nil }
-            return queryURL
-
+        return components.url
     }
 }

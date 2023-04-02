@@ -7,19 +7,24 @@
 
 import Foundation
 
-struct UserAuthRequest: Codable {
+struct User: Codable {
     let username: String
     let password: String
+    let userId: Int?
 }
 
-struct UserAuthResponse: Codable {
-    let userId: Int
+class UserManager {
+    struct AuthentificateRequest: Codable {
+        let username: String
+        let password: String
+        var userId: Int? = nil
+    }
+
+    struct UserResponse: Codable {
+        let userId: Int
+    }
 }
 
-struct User: Codable {
-    let userId: Int
-    let username: String
-}
 
 
 
