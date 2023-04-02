@@ -28,58 +28,58 @@ class SwaggerAPI {
     
     // MARK: - HTTP Methods
     
-    private func dataTask(with request: URLRequest, completionHandler: @escaping (Result<Data, APIError>) -> Void) {
+    private func dataTask(with request: URLRequest, completion: @escaping (Result<Data, APIError>) -> Void) {
         session.dataTask(with: request) { data, response, error in
             guard let data = data else {
-                completionHandler(.failure(.fetchFail))
+                completion(.failure(.fetchFail))
                 return
             }
             
             guard let httpResponse = response as? HTTPURLResponse else {
-                completionHandler(.failure(.fetchFail))
+                completion(.failure(.fetchFail))
                 return
             }
             
             switch httpResponse.statusCode {
             case 200:
-                completionHandler(.success(data))
-            case 404:
-                completionHandler(.failure(.notFound(errorMessage: String(data: data, encoding: .utf8))))
+                completion(.success(data))
             case 400:
-                completionHandler(.failure(.badRequest(errorMessage: String(data: data, encoding: .utf8))))
+                completion(.failure(.badRequest(errorMessage: String(data: data, encoding: .utf8))))
+            case 404:
+                completion(.failure(.notFound(errorMessage: String(data: data, encoding: .utf8))))
             case 405:
-                completionHandler(.failure(.methodNotAllowed(errorMessage: String(data: data, encoding: .utf8))))
+                completion(.failure(.methodNotAllowed(errorMessage: String(data: data, encoding: .utf8))))
             default:
-                completionHandler(.failure(.fetchFail))
+                completion(.failure(.fetchFail))
             }
         }.resume()
     }
     
-    private func postRequest(url: URL, body: Data?, completionHandler: @escaping (Result<Data, APIError>) -> Void) {
+    private func postRequest(url: URL, body: Data?, completion: @escaping (Result<Data, APIError>) -> Void) {
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         request.httpBody = body
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-        dataTask(with: request, completionHandler: completionHandler)
+        dataTask(with: request, completion: completion)
     }
     
-    private func getRequest(url: URL, completionHandler: @escaping (Result<Data, APIError>) -> Void) {
+    private func getRequest(url: URL, completion: @escaping (Result<Data, APIError>) -> Void) {
         let request = URLRequest(url: url)
-        dataTask(with: request, completionHandler: completionHandler)
+        dataTask(with: request, completion: completion)
     }
     
-    private func deleteRequest(url: URL, completionHandler: @escaping (Result<Data, APIError>) -> Void) {
+    private func deleteRequest(url: URL, completion: @escaping (Result<Data, APIError>) -> Void) {
         var request = URLRequest(url: url)
         request.httpMethod = "DELETE"
-        dataTask(with: request, completionHandler: completionHandler)
+        dataTask(with: request, completion: completion)
     }
     
-    private func putRequest(url: URL, body: Data?, completionHandler: @escaping (Result<Data, APIError>) -> Void) {
+    private func putRequest(url: URL, body: Data?, completion: @escaping (Result<Data, APIError>) -> Void) {
         var request = URLRequest(url: url)
         request.httpMethod = "PUT"
         request.httpBody = body
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-        dataTask(with: request, completionHandler: completionHandler)
+        dataTask(with: request, completion: completion)
     }
     
     // MARK: - User Management
@@ -150,4 +150,61 @@ class SwaggerAPI {
             }
         }
     }
+    
+    
+    //    MARK: TASKS
+    
+    func fetchUserTasks(userId: Int, completion: @escaping (Result<[Task], Error>) -> Void) {
+        
+        let id = userId
+        guard let queryURL = Constants.buildURLWithParams(userId: id) else { return }
+        print(queryURL)
+        getRequest(url: queryURL) { [weak self] result in
+            guard let self else { return }
+            
+            switch result {
+            case .success(let data):
+                do {
+                    let parsedData = try self.decoder.decode(Tasks.self, from: data)
+                    completion(.success(parsedData.tasks))
+                    
+                } catch {
+                    completion(.failure(error))
+                }
+            case .failure(let error):
+                switch error {
+                case .fetchFail:
+                    print("unknown error")
+                case .notFound:
+                    print("Not found")
+                case .badRequest(let errorMessage):
+                    print("Bad request:")
+                    print(errorMessage ?? "Bad request")
+                case .parsingFail:
+                    print("parsing failed")
+                case .methodNotAllowed:
+                    print("wrong method")
+                }
+            }
+        }
+    }
+    
+    func deleteTask(taskId: Int, completion: @escaping (Result<Data, APIError>) -> Void) {
+        guard let url = Constants.getURL(for: Constants.taskEndpoint, id: taskId) else { return }
+        
+        deleteRequest(url: url) { result in
+            switch result {
+            case .success(let responseData):
+                print(String(data: responseData, encoding: .utf8)!)
+                print("Task with id \(taskId) was deleted")
+                completion(result)
+            case .failure(let error):
+                print("Error deleting task: \(error)")
+                completion(result)
+            }
+        }
+    }
 }
+
+
+

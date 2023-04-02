@@ -12,6 +12,7 @@ class AuthenticationViewModel {
     
     var authenticationStateDidChange: ((AuthenticationState) -> Void)?
     private let api = SwaggerAPI()
+
     
     enum AuthenticationState {
         case authenticated(User)

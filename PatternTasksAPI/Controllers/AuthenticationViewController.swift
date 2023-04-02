@@ -15,17 +15,18 @@ class AuthenticationViewController: UIViewController {
     
     
     private let viewModel = AuthenticationViewModel()
-    
-    
-    
+    private(set) var user: User?
+     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         viewModel.authenticationStateDidChange = { [weak self] state in
-            guard let self = self else { return }
+            guard self != nil else { return }
             
             switch state {
             case .authenticated(let user):
                 print("User authenticated: \(user)")
+                self?.showTasksTableViewController(user: user)
             case .error(let error):
                 print("Error: \(error)")
             }
@@ -39,18 +40,30 @@ class AuthenticationViewController: UIViewController {
             return
         }
         
-        viewModel.registerUser(username: username, password: password)
+//        viewModel.registerUser(username: username, password: password)
+        viewModel.loginUser(username: username, password: password)
+        
     }
     
-    private func handleAuthenticationState(_ state: AuthenticationViewModel.AuthenticationState) {
-        switch state {
-        case .authenticated(let user):
-            print("Authenticated: \(user)")
-            // Navigate to another screen
-        case .error(let error):
-            print("Error: \(error)")
-            // Show error message
-        }
+//    private func handleAuthenticationState(_ state: AuthenticationViewModel.AuthenticationState) {
+//        switch state {
+//        case .authenticated(let user):
+//            print("Authenticated: \(user)")
+//            self.user = user
+//            showTasksTableViewController(user: user)
+//        case .error(let error):
+//            print("Error: \(error)")
+//
+//        }
+//    }
+    
+    private func showTasksTableViewController(user: User) {
+        let tabVC = TasksTableViewController()
+        tabVC.modalPresentationStyle = .popover
+        tabVC.modalTransitionStyle = .coverVertical
+        tabVC.user = user
+        self.present(tabVC, animated: true)
+
     }
     
 }
