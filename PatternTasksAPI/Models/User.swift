@@ -19,7 +19,7 @@ class UserManager {
         let password: String
         var userId: Int? = nil
     }
-
+    
     struct UserResponse: Codable {
         let userId: Int
     }

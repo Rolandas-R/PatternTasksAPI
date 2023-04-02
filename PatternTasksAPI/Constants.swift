@@ -17,7 +17,7 @@ struct Constants {
         case login = "login/"
         case userTasks = "/api/Task/userTasks"
     }
-
+    
     static func getURL(for endpoint: String, urlSuffix: Constants.URLSuffix? = nil, id: Int? = nil) -> URL? {
         var urlString = Constants.baseURL + endpoint
         if let id = id {

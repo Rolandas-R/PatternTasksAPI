@@ -9,16 +9,17 @@ import Foundation
 
 
 class AuthenticationViewModel {
+    
     var authenticationStateDidChange: ((AuthenticationState) -> Void)?
     private let api = SwaggerAPI()
-
+    
     enum AuthenticationState {
         case authenticated(User)
         case error(Error)
     }
-
+    
     func registerUser(username: String, password: String) {
-        let user = User(username: username, password: password, userId: nil)
+        let user = UserManager.AuthentificateRequest(username: username, password: password)
         api.registerUser(user: user) { result in
             DispatchQueue.main.async {
                 switch result {
@@ -30,7 +31,7 @@ class AuthenticationViewModel {
             }
         }
     }
-
+    
     func loginUser(username: String, password: String) {
         let user = User(username: username, password: password, userId: nil)
         api.loginUser(user: user) { result in
