@@ -30,7 +30,6 @@ class TasksViewModel {
             DispatchQueue.main.async {
                 switch result {
                 case .success(let tasks):
-//                    self?.tableData = tasks
                     self?.tasks = tasks
                     self?.tasksDidChange?(tasks)
                 case .failure(let error):
@@ -68,7 +67,6 @@ class TasksViewModel {
 //                    print("Task deleted successfully")
 //                case .failure(let error):
 //                    print("Error deleting task: \(error)")
-//                    // Re-add task to tableData and trigger tasksDidChange closure
 //                    self?.tasks.insert(task, at: index)
 //                    self?.tasksDidChange?(self!.tasks)
 //                }

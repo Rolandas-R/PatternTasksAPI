@@ -84,6 +84,26 @@ class SwaggerAPI {
     
     // MARK: - User Management
     
+    func registerUser(user: UserManager.AuthentificateRequest, completion: @escaping (Result<User, Error>) -> Void) {
+        guard let url = Constants.getURL(for: Constants.userEndpoint, urlSuffix: .register) else { return }
+        let bodyData = try? JSONEncoder().encode(user)
+        
+        postRequest(url: url, body: bodyData) { response in
+            switch response {
+            case .success(let responseData):
+                guard let userResponse = try? JSONDecoder().decode(UserManager.UserResponse.self, from: responseData) else {
+                    completion(.failure(APIError.parsingFail))
+                    return
+                }
+                let user = User(username: user.username, password: user.password, userId: userResponse.userId)
+                completion(.success(user))
+            case .failure(let error):
+                completion(.failure(error))
+            }
+        }
+    }
+
+    
     func loginUser(user: User, completion: @escaping (Result<User, Error>) -> Void) {
         guard let loginURL = Constants.getURL(for: Constants.userEndpoint, urlSuffix: .login) else { return }
         let loginUserRequest = User(username: user.username, password: user.password, userId: user.userId)
@@ -132,27 +152,9 @@ class SwaggerAPI {
     //    }
     
     
-    func registerUser(user: UserManager.AuthentificateRequest, completion: @escaping (Result<User, Error>) -> Void) {
-        guard let url = Constants.getURL(for: Constants.userEndpoint, urlSuffix: .register) else { return }
-        let bodyData = try? JSONEncoder().encode(user)
-        
-        postRequest(url: url, body: bodyData) { response in
-            switch response {
-            case .success(let responseData):
-                guard let userResponse = try? JSONDecoder().decode(UserManager.UserResponse.self, from: responseData) else {
-                    completion(.failure(APIError.parsingFail))
-                    return
-                }
-                let user = User(username: user.username, password: user.password, userId: userResponse.userId)
-                completion(.success(user))
-            case .failure(let error):
-                completion(.failure(error))
-            }
-        }
-    }
     
     
-    //    MARK: TASKS
+    //    MARK: Tasks Management
     
     func fetchUserTasks(userId: Int, completion: @escaping (Result<[Task], Error>) -> Void) {
         

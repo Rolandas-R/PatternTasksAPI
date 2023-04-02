@@ -45,17 +45,6 @@ class AuthenticationViewController: UIViewController {
         
     }
     
-//    private func handleAuthenticationState(_ state: AuthenticationViewModel.AuthenticationState) {
-//        switch state {
-//        case .authenticated(let user):
-//            print("Authenticated: \(user)")
-//            self.user = user
-//            showTasksTableViewController(user: user)
-//        case .error(let error):
-//            print("Error: \(error)")
-//
-//        }
-//    }
     
     private func showTasksTableViewController(user: User) {
         let tabVC = TasksTableViewController()
