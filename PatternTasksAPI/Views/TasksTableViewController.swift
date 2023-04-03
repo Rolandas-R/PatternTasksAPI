@@ -27,6 +27,7 @@ class TasksTableViewController: UITableViewController {
         
         if let user = user {
             viewModel.fetchUserTasks(user: user)
+            self.tableView.reloadData()
             
         }
    }
@@ -43,8 +44,7 @@ class TasksTableViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        let task = viewModel.tasks[indexPath.row]
-        
+       
         var cell = tableView.dequeueReusableCell(withIdentifier: "taskCell", for: indexPath)
         
         cell = UITableViewCell(style: .subtitle, reuseIdentifier: "taskCell")
@@ -65,10 +65,7 @@ class TasksTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         let taskId = viewModel.tasks[indexPath.row].id
                 if editingStyle == .delete {
-//                    viewModel.tasks.remove(at: indexPath.row)
                     viewModel.deleteTask(taskId: taskId)
-                    viewModel.tasks.remove(at: indexPath.row)
-                    tableView.deleteRows(at: [indexPath], with: .fade)
         } else if editingStyle == .insert {
             return
         }

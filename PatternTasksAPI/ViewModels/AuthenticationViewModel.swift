@@ -46,4 +46,8 @@ class AuthenticationViewModel {
             }
         }
     }
+    
+    func setAuthentificationState() -> Void {
+        
+    }
 }

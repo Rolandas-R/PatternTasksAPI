@@ -18,11 +18,7 @@ class TasksViewModel {
        }
     
     var tasksDidChange: (([Task]) -> Void)?
-    
-    enum TaskFetchState {
-        case fetched(Task)
-        case error(Error)
-    }
+
 
 
     func fetchUserTasks(user: User) {
@@ -44,35 +40,21 @@ class TasksViewModel {
             DispatchQueue.main.async {
                 switch result {
                 case .success:
-                    print("Task deleted successfully")
+                    if let taskIndex = self?.tasks.firstIndex(where: { $0.id == taskId }) {
+                        self?.tasks.remove(at: taskIndex)
+                        self?.tasksDidChange?(self!.tasks)
+                        print("Task deleted successfully")
+                    }
+
                 case .failure(let error):
                     print("Error deleting task: \(error)")
-                    if let taskIndex = self?.tasks.firstIndex(where: { $0.id == taskId }) {
-                        self?.tasks.insert(self!.tasks[taskIndex], at: taskIndex)
-                        self?.tasksDidChange?(self!.tasks)
+
                     }
                 }
             }
         }
     }
     
-//    func deleteTask(at index: Int) {
-//        let task = tasks[index]
-//        api.deleteTask(taskId: task.id) { [weak self] result in
-//            DispatchQueue.main.async {
-//                switch result {
-//                case .success:
-//                    self?.tasks.remove(at: index)
-//                    self?.tasksDidChange?(self!.tasks)
-//                    print("Task deleted successfully")
-//                case .failure(let error):
-//                    print("Error deleting task: \(error)")
-//                    self?.tasks.insert(task, at: index)
-//                    self?.tasksDidChange?(self!.tasks)
-//                }
-//            }
-//        }
-//    }
 
 
-}
+

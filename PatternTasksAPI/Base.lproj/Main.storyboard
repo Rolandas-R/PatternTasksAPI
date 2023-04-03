@@ -47,13 +47,15 @@
                                             <constraint firstAttribute="height" constant="20" id="1RO-kw-Mjb"/>
                                         </constraints>
                                     </view>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cqN-Cx-CIa">
+                                    <button opaque="NO" contentMode="scaleAspectFit" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cqN-Cx-CIa">
                                         <rect key="frame" x="0.0" y="150" width="373" height="50"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="50" id="Qar-Qd-AcI"/>
                                         </constraints>
                                         <state key="normal" title="Button"/>
-                                        <buttonConfiguration key="configuration" style="filled" title="Button"/>
+                                        <buttonConfiguration key="configuration" style="tinted" title="Button">
+                                            <fontDescription key="titleFontDescription" type="system" pointSize="12"/>
+                                        </buttonConfiguration>
                                         <connections>
                                             <action selector="authenticateButtonPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="kis-zP-p1Z"/>
                                         </connections>
@@ -65,24 +67,36 @@
                                     <constraint firstItem="O8y-7I-37w" firstAttribute="width" secondItem="fH2-Ux-3x7" secondAttribute="width" id="yOi-7f-lLk"/>
                                 </constraints>
                             </stackView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Lbk-oF-enh">
+                                <rect key="frame" x="5" y="573" width="383" height="33"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="sVq-Jq-JSc" secondAttribute="trailing" constant="10" id="1ut-SZ-jq4"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="Lbk-oF-enh" secondAttribute="bottom" constant="212" id="9nv-ro-ep5"/>
                             <constraint firstItem="sVq-Jq-JSc" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="10" id="A4j-RG-T60"/>
+                            <constraint firstItem="Lbk-oF-enh" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="5" id="DNG-FQ-A9f"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="Lbk-oF-enh" secondAttribute="trailing" constant="5" id="Pef-J3-Q2Z"/>
                             <constraint firstItem="sVq-Jq-JSc" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="224" id="cdi-Br-liT"/>
+                            <constraint firstItem="Lbk-oF-enh" firstAttribute="top" secondItem="sVq-Jq-JSc" secondAttribute="bottom" constant="90" id="yDm-c7-F7l"/>
                         </constraints>
                     </view>
+                    <navigationItem key="navigationItem" id="EBv-5Z-Wpd"/>
                     <connections>
                         <outlet property="authenticateButton" destination="cqN-Cx-CIa" id="jSZ-Da-Q53"/>
+                        <outlet property="authentificateQuestionLabel" destination="Lbk-oF-enh" id="Cdv-aC-lZV"/>
                         <outlet property="passwordTextField" destination="O8y-7I-37w" id="04C-xq-hFM"/>
                         <outlet property="usernameTextField" destination="fH2-Ux-3x7" id="jE3-1b-TUE"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="130.53435114503816" y="-27.464788732394368"/>
+            <point key="canvasLocation" x="1970.2290076335878" y="-27.464788732394368"/>
         </scene>
         <!--TasksTableViewController-->
         <scene sceneID="SiF-Fc-H7T">
@@ -123,10 +137,11 @@
                             <outlet property="delegate" destination="yAF-iC-ybE" id="GDA-NL-ICc"/>
                         </connections>
                     </tableView>
+                    <navigationItem key="navigationItem" id="qX6-AF-0KX"/>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Viz-ik-R1l" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1060" y="-27"/>
+            <point key="canvasLocation" x="2908" y="-27"/>
         </scene>
     </scenes>
     <resources>

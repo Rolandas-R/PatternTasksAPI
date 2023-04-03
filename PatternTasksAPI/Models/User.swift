@@ -13,6 +13,11 @@ struct User: Codable {
     let userId: Int?
 }
 
+enum AuthentificationRequestState {
+    case register
+    case login
+}
+
 class UserManager {
     struct AuthentificateRequest: Codable {
         let username: String
