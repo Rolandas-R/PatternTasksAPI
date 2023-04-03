@@ -15,9 +15,12 @@
 		9210832729D5FE2100989D4E /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9210832529D5FE2100989D4E /* LaunchScreen.storyboard */; };
 		9210833029D602F500989D4E /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9210832F29D602F500989D4E /* User.swift */; };
 		9210833229D6030500989D4E /* Task.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9210833129D6030500989D4E /* Task.swift */; };
-		9210833429D6071400989D4E /* UserManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9210833329D6071400989D4E /* UserManager.swift */; };
 		9210833829D60E3000989D4E /* SwaggerAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9210833729D60E3000989D4E /* SwaggerAPI.swift */; };
 		9210833A29D60F2F00989D4E /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9210833929D60F2F00989D4E /* Constants.swift */; };
+		921F227929D9521C005DE9ED /* AuthenticationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 921F227829D9521C005DE9ED /* AuthenticationViewModel.swift */; };
+		927A8BB329D985B600DE3F09 /* TasksTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 927A8BB229D985B500DE3F09 /* TasksTableViewController.swift */; };
+		927A8BB529D988BC00DE3F09 /* TasksViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 927A8BB429D988BC00DE3F09 /* TasksViewModel.swift */; };
+		927A8BB729D98AEA00DE3F09 /* Tasks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 927A8BB629D98AEA00DE3F09 /* Tasks.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -31,9 +34,12 @@
 		9210832829D5FE2100989D4E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		9210832F29D602F500989D4E /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		9210833129D6030500989D4E /* Task.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Task.swift; sourceTree = "<group>"; };
-		9210833329D6071400989D4E /* UserManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserManager.swift; sourceTree = "<group>"; };
 		9210833729D60E3000989D4E /* SwaggerAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwaggerAPI.swift; sourceTree = "<group>"; };
 		9210833929D60F2F00989D4E /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		921F227829D9521C005DE9ED /* AuthenticationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationViewModel.swift; sourceTree = "<group>"; };
+		927A8BB229D985B500DE3F09 /* TasksTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TasksTableViewController.swift; sourceTree = "<group>"; };
+		927A8BB429D988BC00DE3F09 /* TasksViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TasksViewModel.swift; sourceTree = "<group>"; };
+		927A8BB629D98AEA00DE3F09 /* Tasks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tasks.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -66,8 +72,9 @@
 		9210831929D5FE0F00989D4E /* PatternTasksAPI */ = {
 			isa = PBXGroup;
 			children = (
-				9210833629D60C7B00989D4E /* ViewModel */,
-				9210833529D60A0700989D4E /* Controllers */,
+				928EB6C029D9D185008555EC /* Networking services */,
+				9210833629D60C7B00989D4E /* ViewModels */,
+				9210833529D60A0700989D4E /* Views */,
 				9210832E29D602D200989D4E /* Models */,
 				9210831A29D5FE0F00989D4E /* AppDelegate.swift */,
 				9210831C29D5FE0F00989D4E /* SceneDelegate.swift */,
@@ -75,9 +82,6 @@
 				9210832329D5FE2100989D4E /* Assets.xcassets */,
 				9210832529D5FE2100989D4E /* LaunchScreen.storyboard */,
 				9210832829D5FE2100989D4E /* Info.plist */,
-				9210833329D6071400989D4E /* UserManager.swift */,
-				9210833729D60E3000989D4E /* SwaggerAPI.swift */,
-				9210833929D60F2F00989D4E /* Constants.swift */,
 			);
 			path = PatternTasksAPI;
 			sourceTree = "<group>";
@@ -87,23 +91,36 @@
 			children = (
 				9210832F29D602F500989D4E /* User.swift */,
 				9210833129D6030500989D4E /* Task.swift */,
+				927A8BB629D98AEA00DE3F09 /* Tasks.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
 		};
-		9210833529D60A0700989D4E /* Controllers */ = {
+		9210833529D60A0700989D4E /* Views */ = {
 			isa = PBXGroup;
 			children = (
 				9210831E29D5FE0F00989D4E /* AuthenticationViewController.swift */,
+				927A8BB229D985B500DE3F09 /* TasksTableViewController.swift */,
 			);
-			path = Controllers;
+			path = Views;
 			sourceTree = "<group>";
 		};
-		9210833629D60C7B00989D4E /* ViewModel */ = {
+		9210833629D60C7B00989D4E /* ViewModels */ = {
 			isa = PBXGroup;
 			children = (
+				921F227829D9521C005DE9ED /* AuthenticationViewModel.swift */,
+				927A8BB429D988BC00DE3F09 /* TasksViewModel.swift */,
 			);
-			path = ViewModel;
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		928EB6C029D9D185008555EC /* Networking services */ = {
+			isa = PBXGroup;
+			children = (
+				9210833929D60F2F00989D4E /* Constants.swift */,
+				9210833729D60E3000989D4E /* SwaggerAPI.swift */,
+			);
+			path = "Networking services";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -177,12 +194,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9210833429D6071400989D4E /* UserManager.swift in Sources */,
+				927A8BB329D985B600DE3F09 /* TasksTableViewController.swift in Sources */,
 				9210833029D602F500989D4E /* User.swift in Sources */,
 				9210831F29D5FE0F00989D4E /* AuthenticationViewController.swift in Sources */,
 				9210833229D6030500989D4E /* Task.swift in Sources */,
 				9210831B29D5FE0F00989D4E /* AppDelegate.swift in Sources */,
+				921F227929D9521C005DE9ED /* AuthenticationViewModel.swift in Sources */,
+				927A8BB729D98AEA00DE3F09 /* Tasks.swift in Sources */,
 				9210831D29D5FE0F00989D4E /* SceneDelegate.swift in Sources */,
+				927A8BB529D988BC00DE3F09 /* TasksViewModel.swift in Sources */,
 				9210833829D60E3000989D4E /* SwaggerAPI.swift in Sources */,
 				9210833A29D60F2F00989D4E /* Constants.swift in Sources */,
 			);

@@ -7,6 +7,23 @@
 
 import Foundation
 
+struct Task: Codable {
+    
+    let id: Int
+    var title: String
+    var description: String
+    var estimateMinutes: Int
+    var assigneeInfo: Assignee
+    var loggedTime: Int
+    var isDone: Bool
+}
+
+struct Assignee: Codable {
+    var id: Int
+    var username: String
+}
+
+
 
 
 
