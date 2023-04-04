@@ -34,8 +34,8 @@ class AuthenticationViewController: UIViewController {
             guard self != nil else { return }
             
             switch state {
-            case .authenticated(let user):
-                print("User authenticated: \(user)")
+            case .authorized(let user):
+                print("User authorized: \(user)")
                 self?.showTasksTableViewController(user: user)
             case .error(let error):
                 print("Error: \(error)")

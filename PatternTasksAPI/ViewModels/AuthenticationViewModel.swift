@@ -10,12 +10,12 @@ import Foundation
 
 class AuthenticationViewModel {
     
-    var authenticationStateDidChange: ((AuthenticationState) -> Void)?
+    var authenticationStateDidChange: ((AuthorizeState) -> Void)?
     private let api = SwaggerAPI()
 
     
-    enum AuthenticationState {
-        case authenticated(User)
+    enum AuthorizeState {
+        case authorized(User)
         case error(Error)
     }
     
@@ -25,7 +25,7 @@ class AuthenticationViewModel {
             DispatchQueue.main.async {
                 switch result {
                 case .success(let user):
-                    self.authenticationStateDidChange?(.authenticated(user))
+                    self.authenticationStateDidChange?(.authorized(user))
                 case .failure(let error):
                     self.authenticationStateDidChange?(.error(error))
                 }
@@ -39,15 +39,11 @@ class AuthenticationViewModel {
             DispatchQueue.main.async {
                 switch result {
                 case .success(let user):
-                    self.authenticationStateDidChange?(.authenticated(user))
+                    self.authenticationStateDidChange?(.authorized(user))
                 case .failure(let error):
                     self.authenticationStateDidChange?(.error(error))
                 }
             }
         }
-    }
-    
-    func setAuthentificationState() -> Void {
-        
     }
 }
